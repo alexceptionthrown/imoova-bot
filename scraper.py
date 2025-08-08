@@ -5,10 +5,31 @@ BASE_URL = "https://www.imoova.com/en/relocations?region=US"
 
 
 def parse_offer(offer: Tag) -> dict[str, str]:
-    offer_dict = {}
-    offer_dict['link'] = offer['href']
-    offer_dict['id'] = offer['href'].split('/')[-1]
-
+    origin_destination = [span.text for span in offer.find_all('span', class_="text-sm font-medium sm:text-base")]
+    attributes = [
+        div.text
+        for div in offer.find(
+            'div',
+            class_='mb-3 flex flex-wrap items-center gap-3 border-b border-gray-100 pb-3 sm:mb-4 sm:gap-4 sm:pb-4'
+        ).find_all('div')
+    ]
+    length = offer.find(
+        'span',
+        class_="inline-flex items-center rounded-full border "
+               "border-blue-200 bg-blue-50 px-2.5 py-1 text-xs font-medium text-blue-700 sm:px-3 sm:py-1.5"
+    ).text
+    offer_dict = {
+        'id': offer['href'].split('/')[-1],
+        'link': offer['href'],
+        'img_url': offer.find("img")['src'],
+        'title': offer.h2.text,
+        'origin': origin_destination[0],
+        'destination': origin_destination[1],
+        'dates': offer.find('time').text,
+        'beds': attributes[2],
+        'length': length
+    }
+    return offer_dict
 
 
 if __name__ == "__main__":
