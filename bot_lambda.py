@@ -98,4 +98,4 @@ def lambda_handler(event, context):
         asyncio.run(send_offers_to_telegram(bot_token, channel_id, new_offers))
     except Exception as e:
         logger.error(e)
-        report_exception_to_telegram(bot_token, channel_id, e)
+        asyncio.run(report_exception_to_telegram(bot_token, channel_id, e))
