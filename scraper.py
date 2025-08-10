@@ -1,5 +1,6 @@
 import requests
 from bs4 import BeautifulSoup, Tag
+import boto3
 
 BASE_URL = "https://www.imoova.com/"
 USA_URI = "/en/relocations?region=US"
@@ -38,6 +39,23 @@ if __name__ == "__main__":
     soup = BeautifulSoup(page.content, 'html.parser')
     offer_class_type = ("focus:outline-hidden flex flex-col rounded-2xl focus:ring-2 "
                         "focus:ring-amber-400/50 focus:ring-offset-2 md:flex-row")
-    offers = soup.find_all("a", class_=offer_class_type)
+    offers = [parse_offer(offer) for offer in soup.find_all("a", class_=offer_class_type)]
+
+    dynamodb = boto3.resource(
+        'dynamodb',
+        endpoint_url='http://localhost:8000',
+        aws_access_key_id='dummy',
+        aws_secret_access_key='dummy',
+        region_name='local',
+    )
+    table = dynamodb.Table('imoova-US-offers')
+
     for offer in offers:
-        print(parse_offer(offer))
+        query = table.get_item(Key={
+            'id': offer['id'],
+        })
+        if 'Item' not in query:
+            print(f"send offer {offer['title']}")
+            table.put_item(Item=offer)
+
+
