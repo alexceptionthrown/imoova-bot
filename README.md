@@ -19,3 +19,6 @@ the added benefits of Secret Manager such as key rotation, etc. since we are onl
 ### AWS Lambda
 - Create Lambda Function with Python 3.13
 - Add layers for SSM (AWS provided), Telegram and scraping (Custom Layers to upload to AWS)
+
+### AWS EventBridge
+- Add scheduled event to trigger AWS Lambda every x minutes
