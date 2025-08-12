@@ -33,7 +33,7 @@ def parse_offer(offer: Tag) -> dict[str, str]:
                "border-blue-200 bg-blue-50 px-2.5 py-1 text-xs font-medium text-blue-700 sm:px-3 sm:py-1.5"
     ).text
     offer_dict = {
-        'id': offer['href'].split('/')[-1],
+        'id': int(offer['href'].split('/')[-1]),
         'link': offer['href'],
         'img_url': offer.find("img")['src'],
         'title': offer.h2.text,
@@ -70,7 +70,7 @@ async def send_offers_to_telegram(token: str, channel_id: str, offers: list[dict
 
 async def report_exception_to_telegram(token: str, channel_id: str, exc: Exception) -> None:
     async with Bot(token) as bot:
-        await bot.send_message(channel_id, f"Error raised {exc}")
+        await bot.send_message(channel_id, f"Error raised: {exc}")
 
 
 def lambda_handler(event, context):
