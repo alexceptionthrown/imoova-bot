@@ -42,6 +42,10 @@ class MockSSMClient:
 
 
 if __name__ == '__main__':
+    """
+    Patches SSM to look for parameters in environment variables,
+    and DynamoDB to point to local docker dynamodb instance. Then calls lambda function with no input.
+    """
     original_boto3_resource = boto3.resource
     with (patch('boto3.client', mock_ssm_client_builder),
           patch('boto3.resource', patch_dynamo_with_local_dynamo, spec=True)):
