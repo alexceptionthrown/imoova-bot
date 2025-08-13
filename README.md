@@ -1,5 +1,5 @@
 # imoova-bot
-Telegram Bot hosted on AWS which sends new Imoova posts to Telgram channel 
+Telegram Bot hosted on AWS which sends new [Imoova](https://www.imoova.com/en) posts to a Telegram channel 
 
 ## AWS install Steps
 Reproduce these steps to install the bot on AWS
