@@ -1,4 +1,6 @@
 # This is the code for the AWS Lambda function
+import json
+import hashlib
 import requests
 from bs4 import BeautifulSoup, Tag
 import boto3
@@ -43,7 +45,7 @@ def parse_offer(offer: Tag) -> dict[str, str]:
         'seats': attributes[0],
         'duration': duration
     }
-    offer_hash = hash(frozenset(offer_dict.items()))
+    offer_hash = hashlib.md5(json.dumps(offer_dict, sort_keys=True).encode("utf-8")).hexdigest()
     offer_dict['hash'] = offer_hash
     return offer_dict
 
@@ -67,7 +69,7 @@ async def send_offers_to_telegram(token: str, channel_id: str, offers: list[dict
                                  photo=offer["img_url"],
                                  caption=generate_image_caption(offer),
                                  parse_mode=ParseMode.HTML,
-                                 read_timeout=10
+                                 read_timeout=15
                                  )
 
 
@@ -100,7 +102,11 @@ def lambda_handler(event, context):
                 new_offers.append(offer)
                 table.put_item(Item=offer)
         asyncio.run(send_offers_to_telegram(bot_token, channel_id, new_offers))
-        return offers
+        return {
+            'total_offers': len(offers),
+            'offers': offers,
+            'total_new_offers': len(new_offers),
+        }
     except Exception as e:
         logger.exception(e)
         asyncio.run(report_exception_to_telegram(bot_token, channel_id, e))
