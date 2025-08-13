@@ -8,7 +8,7 @@ from telegram import Bot
 from telegram.constants import ParseMode
 
 BASE_URL = "https://www.imoova.com/"
-USA_URI = "/en/relocations?region=US"
+USA_URI = "/en/relocations?region=US&driver_age=24"
 
 logging.basicConfig(
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO
@@ -96,6 +96,7 @@ def lambda_handler(event, context):
                 new_offers.append(offer)
                 table.put_item(Item=offer)
         asyncio.run(send_offers_to_telegram(bot_token, channel_id, new_offers))
+        return offers
     except Exception as e:
         logger.error(e)
         asyncio.run(report_exception_to_telegram(bot_token, channel_id, e))

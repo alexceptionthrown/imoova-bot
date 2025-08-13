@@ -11,7 +11,7 @@ the added benefits of Secret Manager such as key rotation, etc. since we are onl
 - add channel id as a secure string
 
 ### AWS IAM 
-- Configure Policy for access to SSM secrets
+- Configure [Policy](aws_config/AccessTelegramSSMSecretsPolicy.json) for access to SSM secrets
 - Configure Role for Lambda Function
   - DynamoDB
   - Secrets Policy
@@ -22,3 +22,11 @@ the added benefits of Secret Manager such as key rotation, etc. since we are onl
 
 ### AWS EventBridge
 - Add scheduled event to trigger AWS Lambda every x minutes
+
+## Testing environment
+We provide a [local testing script](src/imoova-bot/local_lambda_test.py) which calls the AWS lambda function 
+while mocking SSM and DynamoDB to local alternatives.
+
+We recommend you use a local DynamoDB like the include [docker container config](dev_config/dynamodb/docker-compose.yml), 
+As well as [NoSQL Workbench](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/workbench.html)
+to configure your stored local table.
