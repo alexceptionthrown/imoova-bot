@@ -16,6 +16,10 @@ the added benefits of Secret Manager such as key rotation, etc. since we are onl
   - DynamoDB
   - Secrets Policy
 
+### AWS DynamoDB
+- create new table with name imoova-US-offers, Key {'id': N, 'hash': S}. A composite key is required because Imoova 
+reuses ids
+
 ### AWS Lambda
 - Create Lambda Function with Python 3.13 using 1769 MB memory (exactly 1vCPU core) and 512 MB ephemeral storage
 - Add layers for SSM (AWS provided), Telegram and scraping (Custom Layers to upload to AWS)
@@ -30,3 +34,8 @@ while mocking SSM and DynamoDB to local alternatives.
 We recommend you use a local DynamoDB like the include [docker container config](dev_config/dynamodb/docker-compose.yml), 
 As well as [NoSQL Workbench](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/workbench.html)
 to configure your stored local table.
+
+## Known Issues
+- If the async call to telegram api fails or partly fails, new posts will still have beeen written to DynamoDB,
+So they will not be sent on the next lambda call.
+- We have not tested if an exception during lambda call is picked up as an error by AWS cloudwatch metrics
