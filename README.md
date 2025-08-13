@@ -17,7 +17,7 @@ the added benefits of Secret Manager such as key rotation, etc. since we are onl
   - Secrets Policy
 
 ### AWS Lambda
-- Create Lambda Function with Python 3.13
+- Create Lambda Function with Python 3.13 using 1769 MB memory and 513 MB ephemeral storage
 - Add layers for SSM (AWS provided), Telegram and scraping (Custom Layers to upload to AWS)
 
 ### AWS EventBridge
