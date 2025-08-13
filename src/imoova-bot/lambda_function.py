@@ -43,6 +43,8 @@ def parse_offer(offer: Tag) -> dict[str, str]:
         'seats': attributes[0],
         'duration': duration
     }
+    offer_hash = hash(frozenset(offer_dict.items()))
+    offer_dict['hash'] = offer_hash
     return offer_dict
 
 
@@ -64,7 +66,8 @@ async def send_offers_to_telegram(token: str, channel_id: str, offers: list[dict
             await bot.send_photo(chat_id=channel_id,
                                  photo=offer["img_url"],
                                  caption=generate_image_caption(offer),
-                                 parse_mode=ParseMode.HTML
+                                 parse_mode=ParseMode.HTML,
+                                 read_timeout=10
                                  )
 
 
@@ -91,6 +94,7 @@ def lambda_handler(event, context):
         for offer in offers:
             query = table.get_item(Key={
                 'id': offer['id'],
+                'hash': offer['hash']
             })
             if 'Item' not in query:
                 new_offers.append(offer)
@@ -98,5 +102,5 @@ def lambda_handler(event, context):
         asyncio.run(send_offers_to_telegram(bot_token, channel_id, new_offers))
         return offers
     except Exception as e:
-        logger.error(e)
+        logger.exception(e)
         asyncio.run(report_exception_to_telegram(bot_token, channel_id, e))
