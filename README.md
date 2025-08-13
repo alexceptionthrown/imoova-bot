@@ -36,5 +36,6 @@ As well as [NoSQL Workbench](https://docs.aws.amazon.com/amazondynamodb/latest/d
 to configure your stored local table.
 
 ## Known Issues
-If the async call to telegram api fails or partly fails, new posts will still have beeen written to DynamoDB,
+- If the async call to telegram api fails or partly fails, new posts will still have beeen written to DynamoDB,
 So they will not be sent on the next lambda call.
+- We have not tested if an exception during lambda call is picked up as an error by AWS cloudwatch metrics
