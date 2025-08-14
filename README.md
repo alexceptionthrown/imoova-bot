@@ -35,6 +35,9 @@ We recommend you use a local DynamoDB like the include [docker container config]
 As well as [NoSQL Workbench](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/workbench.html)
 to configure your stored local table.
 
+## Possible Future features:
+Also scrape secondary features like last possible drop off date, max mileage, fuel reimbursement, etc.
+
 ## Known Issues
 - If the async call to telegram api fails or partly fails, new posts will still have beeen written to DynamoDB,
 So they will not be sent on the next lambda call.
