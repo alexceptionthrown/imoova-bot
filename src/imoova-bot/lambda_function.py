@@ -86,8 +86,7 @@ def lambda_handler(event, context):
     try:
         page = requests.get(BASE_URL + USA_URI)
         soup = BeautifulSoup(page.content, 'html.parser')
-        offer_class_type = ("focus:outline-hidden flex flex-col rounded-2xl focus:ring-2 "
-                            "focus:ring-amber-400/50 focus:ring-offset-2 md:flex-row")
+        offer_class_type = ("flex flex-col overflow-hidden rounded-2xl focus:ring-offset-2 md:flex-row")
         offers = [parse_offer(offer) for offer in soup.find_all("a", class_=offer_class_type)]
         dynamodb = boto3.resource('dynamodb')
         table = dynamodb.Table('imoova-US-offers')
