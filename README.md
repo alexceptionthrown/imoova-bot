@@ -36,7 +36,8 @@ As well as [NoSQL Workbench](https://docs.aws.amazon.com/amazondynamodb/latest/d
 to configure your stored local table.
 
 ## Possible Future features:
-Also scrape secondary features like last possible drop off date, max mileage, fuel reimbursement, etc.
+- Also scrape secondary features like last possible drop off date, max mileage, fuel reimbursement, etc.
+- Add alarm for when scraper has failed to find any for posts for x amount of time
 
 ## Known Issues
 - If the async call to telegram api fails or partly fails, new posts will still have been written to DynamoDB,
